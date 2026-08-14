@@ -1,4 +1,3 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDollarSign,
@@ -15,6 +14,7 @@ export default function Dashboard() {
       change: "+14.5%",
       icon: faDollarSign,
       color: "#6366f1",
+      bgLight: "rgba(99, 102, 241, 0.1)",
     },
     {
       title: "Total Orders",
@@ -22,6 +22,7 @@ export default function Dashboard() {
       change: "+8.2%",
       icon: faShoppingBag,
       color: "#a855f7",
+      bgLight: "rgba(168, 85, 247, 0.1)",
     },
     {
       title: "Active Customers",
@@ -29,6 +30,7 @@ export default function Dashboard() {
       change: "+12.1%",
       icon: faUsers,
       color: "#38bdf8",
+      bgLight: "rgba(56, 189, 248, 0.1)",
     },
     {
       title: "Growth Rate",
@@ -36,85 +38,49 @@ export default function Dashboard() {
       change: "+4.3%",
       icon: faArrowUpRightDots,
       color: "#22c55e",
+      bgLight: "rgba(34, 197, 94, 0.1)",
     },
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+    <div className="flex flex-col gap-8">
+      {/* Welcome & Header Section */}
       <div>
-        <h1
-          style={{ fontSize: "1.75rem", margin: "0 0 6px 0", color: "#f8fafc" }}
-        >
+        <h1 className="text-3xl font-semibold text-white tracking-tight mb-1">
           Dashboard Overview
         </h1>
-        <p style={{ color: "#94a3b8", fontSize: "0.95rem" }}>
+        <p className="text-sm text-slate-400">
           Welcome back, Eric. Here is what is happening with your store today.
         </p>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "20px",
-        }}
-      >
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
           <div
             key={i}
-            style={{
-              background: "#0f172a",
-              border: "1px solid rgba(255, 255, 255, 0.07)",
-              borderRadius: "12px",
-              padding: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
+            className="bg-slate-950/40 backdrop-blur-md border border-white/8 rounded-xl p-6 flex items-center justify-between transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/15 hover:shadow-2xl hover:bg-slate-950/65"
           >
-            <div>
-              <div
-                style={{
-                  color: "#94a3b8",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                  marginBottom: "8px",
-                }}
-              >
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                 {stat.title}
-              </div>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: 700,
-                  color: "#ffffff",
-                }}
-              >
+              </span>
+              <span className="text-2xl font-bold text-white leading-tight">
                 {stat.value}
-              </div>
-              <div
-                style={{
-                  color: "#22c55e",
-                  fontSize: "0.8rem",
-                  fontWeight: 600,
-                  marginTop: "6px",
-                }}
-              >
-                {stat.change} vs last month
+              </span>
+              <div className="flex items-center gap-1.5 mt-1">
+                <span className="text-xs font-bold text-emerald-400">
+                  {stat.change}
+                </span>
+                <span className="text-xs text-slate-500">
+                  vs last month
+                </span>
               </div>
             </div>
+
             <div
-              style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "10px",
-                background: `${stat.color}15`,
-                color: stat.color,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "1.1rem",
-              }}
+              className="w-12 h-12 rounded-lg flex items-center justify-center text-xl shadow-inner"
+              style={{ backgroundColor: stat.bgLight, color: stat.color }}
             >
               <FontAwesomeIcon icon={stat.icon} />
             </div>
