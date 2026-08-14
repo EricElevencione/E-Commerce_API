@@ -1,3 +1,4 @@
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDollarSign,
@@ -5,6 +6,19 @@ import {
   faUsers,
   faArrowUpRightDots,
 } from "@fortawesome/free-solid-svg-icons";
+
+// Reusable layout components to capsule the CSS design classes
+function DashboardTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h1 className="text-3xl font-semibold text-[#C7D3C0] tracking-tight mb-1 ">
+      {children}
+    </h1>
+  );
+}
+
+function DashboardSubtitle({ children }: { children: React.ReactNode }) {
+  return <p className="text-sm text-slate-500">{children}</p>;
+}
 
 export default function Dashboard() {
   const stats = [
@@ -46,12 +60,10 @@ export default function Dashboard() {
     <div className="flex flex-col gap-8">
       {/* Welcome & Header Section */}
       <div>
-        <h1 className="text-3xl font-semibold text-slate-900 tracking-tight mb-1">
-          Dashboard Overview
-        </h1>
-        <p className="text-sm text-slate-500">
+        <DashboardTitle>Dashboard Overview</DashboardTitle>
+        <DashboardSubtitle>
           Welcome back, Eric. Here is what is happening with your store today.
-        </p>
+        </DashboardSubtitle>
       </div>
 
       {/* Stats Grid */}

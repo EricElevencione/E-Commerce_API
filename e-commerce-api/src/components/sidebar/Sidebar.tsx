@@ -34,7 +34,7 @@ export default function Sidebar() {
   return (
     <aside className="w-[260px] h-screen sticky top-0 bg-white text-slate-800 flex flex-col border-r border-slate-200 select-none z-[100] transition-all duration-300 font-sans">
       {/* Brand Logo Header */}
-      <div className="py-6 px-5 flex items-center gap-3 border-b border-slate-100">
+      <div className="py-6 px-2 flex items-center gap-3 border-b border-slate-100 w-[80%] mx-auto">
         <div className="w-10 h-10 rounded-[10px] bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-[1.1rem] shadow-[0_4px_14px_rgba(99,102,241,0.4)]">
           <FontAwesomeIcon icon={faShop} />
         </div>
