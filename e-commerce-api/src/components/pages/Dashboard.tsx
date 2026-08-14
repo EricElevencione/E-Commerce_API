@@ -46,10 +46,10 @@ export default function Dashboard() {
     <div className="flex flex-col gap-8">
       {/* Welcome & Header Section */}
       <div>
-        <h1 className="text-3xl font-semibold text-white tracking-tight mb-1">
+        <h1 className="text-3xl font-semibold text-slate-900 tracking-tight mb-1">
           Dashboard Overview
         </h1>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-slate-500">
           Welcome back, Eric. Here is what is happening with your store today.
         </p>
       </div>
@@ -59,22 +59,20 @@ export default function Dashboard() {
         {stats.map((stat, i) => (
           <div
             key={i}
-            className="bg-slate-950/40 backdrop-blur-md border border-white/8 rounded-xl p-6 flex items-center justify-between transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/15 hover:shadow-2xl hover:bg-slate-950/65"
+            className="bg-white border border-slate-200 rounded-xl p-6 flex items-center justify-between transition-all duration-300 ease-out hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-slate-200/60 shadow-sm shadow-slate-200/40"
           >
             <div className="flex flex-col gap-1.5">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 {stat.title}
               </span>
-              <span className="text-2xl font-bold text-white leading-tight">
+              <span className="text-2xl font-bold text-slate-900 leading-tight">
                 {stat.value}
               </span>
               <div className="flex items-center gap-1.5 mt-1">
-                <span className="text-xs font-bold text-emerald-400">
+                <span className="text-xs font-bold text-emerald-600">
                   {stat.change}
                 </span>
-                <span className="text-xs text-slate-500">
-                  vs last month
-                </span>
+                <span className="text-xs text-slate-400">vs last month</span>
               </div>
             </div>
 

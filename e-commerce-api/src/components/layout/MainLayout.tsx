@@ -3,9 +3,9 @@ import Sidebar from "../sidebar/Sidebar";
 
 export default function MainLayout() {
   return (
-    <div className="app-container">
+    <div className="app-layout">
       <Sidebar />
-      <main className="content">
+      <main className="main-content">
         <Outlet /> {/* Child pages render here dynamically */}
       </main>
     </div>
