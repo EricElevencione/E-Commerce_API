@@ -6,7 +6,9 @@
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db": "prisma dev",
+    "start-all": "concurrently \"npm run db\" \"npm run dev\""
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
@@ -17,6 +19,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^24.13.3",
+    "concurrently": "^10.0.5",
     "dotenv": "^16.4.7",
     "prisma": "^6.4.1",
     "tsx": "^4.19.3",

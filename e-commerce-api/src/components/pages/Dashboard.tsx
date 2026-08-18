@@ -101,9 +101,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetch("http://localhost:3001/api/products")
-      .then((res) => res.json())
+      .then((res) => res.json()) // 1. Convert the raw response stream to JSON
       .then((resData) => {
-        // Our backend returns { data: [...] }
+        // 2. Set the state with the products array
+        // Recall that your backend wraps the response in `{ data: products }`
         setProducts(resData.data);
       })
       .catch((error) => {
@@ -197,15 +198,15 @@ export default function Dashboard() {
 
       {/* Categories Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {categoryProducts.map((product, i) => (
+        {products.map((product) => (
           <div
-            key={i}
+            key={product.id}
             className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group cursor-pointer"
           >
             {/* Image Container */}
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#EEEEEE] flex items-center justify-center p-6">
               <img
-                src={product.image}
+                src={product.imageUrl}
                 alt={product.name}
                 className="max-h-full max-w-full object-contain transition-transform duration-500 ease-out group-hover:scale-110"
               />
@@ -218,10 +219,13 @@ export default function Dashboard() {
                 Category
               </span>
               <h3 className="text-lg font-extrabold text-[#000000] mt-0.5">
-                {product.category}
+                {product.category.name}
               </h3>
               <p className="text-xs text-slate-500 mt-1 font-medium line-clamp-1">
                 Featured: {product.name}
+              </p>
+              <p className="text-xs text-slate-500 mt-1 font-medium line-clamp-1">
+                Featured: {product.price}
               </p>
 
               {/* Action Link */}
