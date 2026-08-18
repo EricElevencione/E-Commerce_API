@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import bgImg from "@/assets/images/bgimg.jpg";
@@ -78,7 +78,39 @@ function Button({
   );
 }
 
+// Define interface for a single product (renamed to Product for readability)
+interface Product {
+  id: number; // Database IDs in your prisma schema are Int numbers
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  imageUrl: string; // Database matches 'imageUrl' instead of 'image'
+  categoryId: number;
+  category: {
+    id: number;
+    name: string;
+    slug: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function Dashboard() {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3001/api/products")
+      .then((res) => res.json())
+      .then((resData) => {
+        // Our backend returns { data: [...] }
+        setProducts(resData.data);
+      })
+      .catch((error) => {
+        console.error("Failed to load products", error);
+      });
+  }, []); // [] ensures the fetch runs exactly once on load
+
   const trendingProducts = [
     {
       name: "Nike Air Max Pulse",
