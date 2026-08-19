@@ -163,7 +163,7 @@ export default function Dashboard() {
         </PageSubtitle>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm h-[15rem] w-full">
+      <div className="overflow-hidden rounded-xl border bg-slate-100 shadow-sm h-[rem] w-full">
         <div
           className="w-full h-full bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgImg})` }}
