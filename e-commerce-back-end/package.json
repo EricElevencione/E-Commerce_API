@@ -4,11 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "server": "tsx src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc",
     "postinstall": "prisma generate",
     "db": "prisma dev",
-    "start-all": "concurrently \"npm run db\" \"npm run dev\""
+    "start-all": "concurrently \"npm run db\" \"wait-on tcp:51213 && npm run server\""
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
@@ -23,7 +24,8 @@
     "dotenv": "^16.4.7",
     "prisma": "^6.4.1",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "wait-on": "^9.1.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

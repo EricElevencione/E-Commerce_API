@@ -33,6 +33,7 @@ model Product {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   orderItems  OrderItem[]
+  trending  Trending?
 
   @@index([categoryId])
 }
@@ -72,6 +73,14 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+model Trending {
+  id        String   @id @default(cuid())
+  productId Int      @unique
+  product   Product  @relation(fields: [productId], references: [id])
+  rank      Int
+  addedAt   DateTime @default(now())
 }
 
 enum OrderStatus {

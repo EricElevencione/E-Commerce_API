@@ -29,6 +29,7 @@ async function fetchFromDummyJSON(category: string): Promise<DummyProduct[]> {
 
 async function main() {
   console.log("🧹 Cleaning database...");
+  await prisma.trending.deleteMany(); // Clear old trending records first
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
   await prisma.product.deleteMany();
@@ -178,6 +179,24 @@ async function main() {
         }
       }
     });
+  }
+
+  console.log("🔥 Seeding trending products...");
+  if (createdProducts.length > 0) {
+    // Shuffle the products list to pick random ones
+    const shuffled = [...createdProducts].sort(() => 0.5 - Math.random());
+    // Take up to 3 products
+    const trendingProductsToSeed = shuffled.slice(0, 3);
+    
+    for (let i = 0; i < trendingProductsToSeed.length; i++) {
+      await prisma.trending.create({
+        data: {
+          productId: trendingProductsToSeed[i].id,
+          rank: i + 1,
+        },
+      });
+    }
+    console.log(`🔥 Successfully marked ${trendingProductsToSeed.length} random products as trending!`);
   }
 
   console.log("🎉 Seeding completed successfully!");

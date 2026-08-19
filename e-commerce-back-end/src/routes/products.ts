@@ -27,6 +27,52 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
+// GET /api/products/trending — list trending products sorted by rank
+router.get("/trending", async (req: Request, res: Response) => {
+  try {
+    let trendingRows = await prisma.trending.findMany({
+      include: {
+        product: {
+          include: { category: true },
+        },
+      },
+      orderBy: { rank: "asc" },
+    });
+
+    // Fallback: If no trending products exist, dynamically seed 3 random ones
+    if (trendingRows.length === 0) {
+      const allProducts = await prisma.product.findMany();
+      if (allProducts.length > 0) {
+        const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 3);
+        
+        for (let i = 0; i < selected.length; i++) {
+          await prisma.trending.create({
+            data: {
+              productId: selected[i].id,
+              rank: i + 1,
+            },
+          });
+        }
+
+        // Re-fetch now that they are created
+        trendingRows = await prisma.trending.findMany({
+          include: {
+            product: {
+              include: { category: true },
+            },
+          },
+          orderBy: { rank: "asc" },
+        });
+      }
+    }
+
+    res.json({ data: trendingRows });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch trending products" });
+  }
+});
+
 // GET /api/products/:id — single product
 router.get("/:id", async (req: Request, res: Response) => {
   try {

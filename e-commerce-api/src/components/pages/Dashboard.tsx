@@ -6,10 +6,6 @@ import nike1 from "@/assets/images/Nike1.webp";
 import nike2 from "@/assets/images/Nike2.webp";
 import nike3 from "@/assets/images/Nike3.webp";
 import nike4 from "@/assets/images/Nike4.webp";
-import nike5 from "@/assets/images/Nike5.webp";
-import nike6 from "@/assets/images/Nike6.webp";
-import nike7 from "@/assets/images/Nike7.webp";
-import nike8 from "@/assets/images/Nike8.webp";
 /*
 UI Sizes
 
@@ -96,21 +92,35 @@ interface Product {
   updatedAt: string;
 }
 
+interface Trending {
+  id: number;
+  productId: number;
+  product: Product;
+  rank: number;
+  addedAt: string;
+}
+
 export default function Dashboard() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [trending, setTrending] = useState<Trending[]>([]);
 
   useEffect(() => {
+    // 1. Fetch normal products
     fetch("http://localhost:3001/api/products")
-      .then((res) => res.json()) // 1. Convert the raw response stream to JSON
+      .then((res) => res.json())
       .then((resData) => {
-        // 2. Set the state with the products array
-        // Recall that your backend wraps the response in `{ data: products }`
         setProducts(resData.data);
       })
-      .catch((error) => {
-        console.error("Failed to load products", error);
-      });
-  }, []); // [] ensures the fetch runs exactly once on load
+      .catch((error) => console.error("Failed to load products", error));
+
+    // 2. Fetch trending products
+    fetch("http://localhost:3001/api/products/trending")
+      .then((res) => res.json())
+      .then((resData) => {
+        setTrending(resData.data); // Saves the list of Trending objects
+      })
+      .catch((error) => console.error("Failed to load trending", error));
+  }, []);
 
   const trendingProducts = [
     {
@@ -140,29 +150,6 @@ export default function Dashboard() {
       image: nike4,
       rating: "4.6",
       category: "Road Running Shoes",
-    },
-  ];
-
-  const categoryProducts = [
-    {
-      name: "Nike Air Max Dn",
-      image: nike5,
-      category: "Lifestyle",
-    },
-    {
-      name: "Nike Invincible 3",
-      image: nike6,
-      category: "Running",
-    },
-    {
-      name: "Nike GT Hustle 3",
-      image: nike7,
-      category: "Basketball",
-    },
-    {
-      name: "Nike Metcon 9",
-      image: nike8,
-      category: "Training",
     },
   ];
 
@@ -256,16 +243,21 @@ export default function Dashboard() {
 
       {/* Trending Shoes Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {trendingProducts.map((product, i) => (
+        {trending.map((item) => (
           <div
-            key={i}
-            className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
+            key={item.id}
+            className="relative bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
           >
+            {/* Rank Badge */}
+            <div className="absolute top-3 right-3 z-10 bg-black text-white text-xs font-black px-2.5 py-1 rounded-lg shadow-sm">
+              #{item.rank}
+            </div>
+
             {/* Image Container */}
             <div className="relative aspect-square w-full overflow-hidden bg-[#EEEEEE] flex items-center justify-center p-4">
               <img
-                src={product.image}
-                alt={product.name}
+                src={item.product.imageUrl || ""}
+                alt={item.product.name}
                 className="max-h-full max-w-full object-contain transition-transform duration-500 ease-out group-hover:scale-110"
               />
               <span className="absolute top-3 left-3 bg-[#DC5F00] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
@@ -276,17 +268,17 @@ export default function Dashboard() {
             {/* Product Details */}
             <div className="p-4 flex flex-col flex-grow">
               <span className="text-[10px] font-bold text-[#DC5F00] uppercase tracking-wider">
-                {product.category}
+                {item.product.category.name}
               </span>
               <h3 className="text-sm font-bold text-[#000000] mt-1 line-clamp-1">
-                {product.name}
+                {item.product.name}
               </h3>
 
               {/* Rating */}
               <div className="flex items-center gap-1 mt-1">
                 <span className="text-[#DC5F00] text-xs">★</span>
                 <span className="text-xs font-semibold text-slate-700">
-                  {product.rating}
+                  4.8
                 </span>
                 <span className="text-[10px] text-slate-400 font-medium">
                   (48 reviews)
@@ -296,7 +288,7 @@ export default function Dashboard() {
               {/* Price & Action */}
               <div className="flex items-center justify-between mt-4 pt-2 border-t border-slate-100">
                 <span className="text-base font-extrabold text-[#000000]">
-                  {product.price}
+                  ₱{item.product.price}
                 </span>
                 <Button
                   variant="primary"
