@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import bgImg from "@/assets/images/bgimg.jpg";
-import nike1 from "@/assets/images/Nike1.webp";
-import nike2 from "@/assets/images/Nike2.webp";
-import nike3 from "@/assets/images/Nike3.webp";
-import nike4 from "@/assets/images/Nike4.webp";
+
 /*
 UI Sizes
 
@@ -105,53 +102,21 @@ export default function Dashboard() {
   const [trending, setTrending] = useState<Trending[]>([]);
 
   useEffect(() => {
-    // 1. Fetch normal products
-    fetch("http://localhost:3001/api/products")
-      .then((res) => res.json())
-      .then((resData) => {
-        setProducts(resData.data);
+    Promise.all([
+      fetch("http://localhost:3001/api/products").then((res) => res.json()),
+      fetch("http://localhost:3001/api/products/trending").then((res) =>
+        res.json(),
+      ),
+    ])
+      .then(([productsRes, trendingRes]) => {
+        // Destructures the responses in the exact same order as the array above
+        setProducts(productsRes.data);
+        setTrending(trendingRes.data);
       })
-      .catch((error) => console.error("Failed to load products", error));
-
-    // 2. Fetch trending products
-    fetch("http://localhost:3001/api/products/trending")
-      .then((res) => res.json())
-      .then((resData) => {
-        setTrending(resData.data); // Saves the list of Trending objects
-      })
-      .catch((error) => console.error("Failed to load trending", error));
+      .catch((error) => {
+        console.error("Failed to fetch dashboard data", error);
+      });
   }, []);
-
-  const trendingProducts = [
-    {
-      name: "Nike Air Max Pulse",
-      price: "$160.00",
-      image: nike1,
-      rating: "4.8",
-      category: "Running Shoes",
-    },
-    {
-      name: "Nike Dunk Low Retro",
-      price: "$115.00",
-      image: nike2,
-      rating: "4.9",
-      category: "Lifestyle Shoes",
-    },
-    {
-      name: "Nike Air Force 1 '07",
-      price: "$115.00",
-      image: nike3,
-      rating: "4.7",
-      category: "Lifestyle Shoes",
-    },
-    {
-      name: "Nike Pegasus 41",
-      price: "$140.00",
-      image: nike4,
-      rating: "4.6",
-      category: "Road Running Shoes",
-    },
-  ];
 
   return (
     <div className="flex flex-col gap-8 w-full h-auto">
@@ -163,7 +128,7 @@ export default function Dashboard() {
         </PageSubtitle>
       </div>
 
-      <div className="overflow-hidden rounded-xl border bg-slate-100 shadow-sm h-[rem] w-full">
+      <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm h-[40rem] w-full">
         <div
           className="w-full h-full bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgImg})` }}
